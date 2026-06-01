@@ -1,0 +1,11 @@
+# Local screenshot scratch (the curated ones live in screenshots/)
+/shots/
+
+# Native dev/test binaries
+/starfall_lin
+*.test
+*.out
+
+# OS cruft
+.DS_Store
+Thumbs.db
