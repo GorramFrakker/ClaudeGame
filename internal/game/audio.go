@@ -63,10 +63,10 @@ func newAudio(enabled bool) *Audio {
 	}
 	// (id, pcm, pool size, volume)
 	defs := []struct {
-		id   sfxID
-		pcm  []byte
-		n    int
-		vol  float64
+		id  sfxID
+		pcm []byte
+		n   int
+		vol float64
 	}{
 		{sfxShoot, synthShoot(), 10, 0.16},
 		{sfxEnemyShoot, synthEnemyShoot(), 8, 0.18},

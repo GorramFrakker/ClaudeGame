@@ -41,13 +41,13 @@ const (
 // Director scripts the campaign: it shows banners, spawns waves and bosses,
 // and decides when to advance based on the battlefield state.
 type Director struct {
-	stages    []stage
-	idx       int
-	state     dirState
-	stageT    float64
-	bannerT   float64
-	bannerMax float64
-	nextEvent int
+	stages      []stage
+	idx         int
+	state       dirState
+	stageT      float64
+	bannerT     float64
+	bannerMax   float64
+	nextEvent   int
 	bossSpawned bool
 }
 

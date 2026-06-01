@@ -110,8 +110,8 @@ func (p *Play) breakCombo() {
 	p.comboTimer = 0
 }
 
-func (p *Play) addShake(s float64)         { p.shake = maxf(p.shake, s) }
-func (p *Play) setFlash(c color.RGBA)      { p.flash = 1; p.flashCol = c }
+func (p *Play) addShake(s float64)    { p.shake = maxf(p.shake, s) }
+func (p *Play) setFlash(c color.RGBA) { p.flash = 1; p.flashCol = c }
 func (p *Play) popText(pos Vec2, s string, c color.RGBA) {
 	p.floats = append(p.floats, floatText{
 		pos: pos.Add(V(0, -12)), vel: V(0, -42), text: s, col: c, life: 1, maxLife: 1,
@@ -173,7 +173,7 @@ func (p *Play) enemyShootWall(y, speed, dmg, gapX, gapW float64, col color.RGBA)
 	}
 }
 
-func (p *Play) spawnEnemy(e *Enemy)     { p.enemies = append(p.enemies, e) }
+func (p *Play) spawnEnemy(e *Enemy) { p.enemies = append(p.enemies, e) }
 func (p *Play) spawnPowerup(pos Vec2, k powerupKind) {
 	p.powerups = append(p.powerups, newPowerup(pos, k))
 }

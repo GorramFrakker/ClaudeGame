@@ -32,13 +32,13 @@ type Game struct {
 	mode Mode
 	play *Play
 
-	menuSel        int
-	titleT         float64
-	fade           float64
-	endInputDelay  float64
-	quit           bool
-	frame          int64
-	mutedFlash     float64
+	menuSel       int
+	titleT        float64
+	fade          float64
+	endInputDelay float64
+	quit          bool
+	frame         int64
+	mutedFlash    float64
 
 	worldImg *ebiten.Image
 
@@ -60,9 +60,9 @@ func NewGame() (*Game, error) {
 	}
 	seed := time.Now().UnixNano()
 	g := &Game{
-		fonts:    fonts,
-		rng:      rand.New(rand.NewSource(seed)),
-		save:     LoadSave(),
+		fonts:      fonts,
+		rng:        rand.New(rand.NewSource(seed)),
+		save:       LoadSave(),
 		mode:       ModeTitle,
 		startStage: -1,
 		worldImg:   ebiten.NewImage(ScreenW, ScreenH),
@@ -105,6 +105,39 @@ func (g *Game) configureTestHooks() {
 		if n, err := strconv.ParseInt(v, 10, 64); err == nil {
 			g.exitAt = n
 		}
+	}
+	if v := os.Getenv("STARFALL_SCREEN"); v != "" {
+		g.forceScreen(v)
+	}
+}
+
+// forceScreen jumps straight to a given screen for screenshots/CI. It builds a
+// plausible finished session so the end screens have stats to show.
+func (g *Game) forceScreen(name string) {
+	g.save.HighScore = 248650
+	mk := func() {
+		g.play = newPlay(g)
+		g.play.score = 248650
+		g.play.enemiesKilled = 214
+		g.play.maxCombo = 31
+		g.play.director.idx = len(g.play.director.stages) - 1
+		g.play.director.state = dsDone // no wave banner over the screenshot
+		g.endInputDelay = 1e9          // ignore input so it stays put for the shot
+	}
+	switch name {
+	case "howto":
+		g.mode = ModeHowTo
+	case "paused":
+		mk()
+		g.mode = ModePaused
+	case "gameover":
+		mk()
+		g.play.result = resLose
+		g.mode = ModeGameOver
+	case "victory":
+		mk()
+		g.play.result = resWin
+		g.mode = ModeVictory
 	}
 }
 
@@ -423,14 +456,14 @@ func (g *Game) drawHowTo(screen *ebiten.Image) {
 	}{
 		{"MOVE", "Arrow keys or WASD"},
 		{"FIRE", "Z / Space (hold)"},
-		{"BOMB", "X  — clears bullets, big damage"},
-		{"FOCUS", "Shift — slow, precise, shows hitbox"},
+		{"BOMB", "X — clear bullets + damage"},
+		{"FOCUS", "Shift — slow, precise aim"},
 		{"PAUSE", "Esc / P"},
 	}
 	y := 130.0
 	for _, ln := range lines {
-		f.right(screen, ln.k, cx-12, y, 16, colGold, true)
-		f.left(screen, ln.v, cx+12, y, 16, colUIText, false)
+		f.right(screen, ln.k, cx-12, y, 15, colGold, true)
+		f.left(screen, ln.v, cx+12, y, 15, colUIText, false)
 		y += 30
 	}
 
